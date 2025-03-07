@@ -19,11 +19,19 @@ const io = new Server(server, {
 
 const users: Record<string, string> = {};
 
+{
+  /*Message interface for message, type can be "your" or "history" */
+}
+interface Message {
+  type: string;
+  message: string;
+}
+
 io.on("connection", (socket) => {
   console.log(`${socket.id}`);
-  socket.on("message", (arg, callback) => {
-    socket.broadcast.emit("add_message", arg);
-    socket.emit("add_message", arg);
+  socket.on("message", (arg: string) => {
+    socket.broadcast.emit("add_message", { type: "history", message: arg });
+    socket.emit("add_message", { type: "your", message: arg });
   });
 });
 
